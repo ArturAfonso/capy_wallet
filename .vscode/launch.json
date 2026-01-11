@@ -1,0 +1,17 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Dev (Testnet)",
+      "request": "launch",
+      "type": "dart",
+      "args": ["--dart-define=DEV=true"]
+    },
+    {
+      "name": "Prod (Mainnet)",
+      "request": "launch",
+      "type": "dart",
+      "args": ["--dart-define=DEV=false"]
+    }
+  ]
+}

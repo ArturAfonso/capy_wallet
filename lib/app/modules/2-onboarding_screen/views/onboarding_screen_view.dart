@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:capy_wallet/app/data/shared/custom_button.dart';
 import 'package:capy_wallet/app/data/theme/app_colors.dart';
 import 'package:capy_wallet/app/data/theme/app_text_styles.dart';
-import 'package:capy_wallet/app/modules/onboarding_screen/views/pre_onboarding_screen.dart';
+import 'package:capy_wallet/app/modules/2-onboarding_screen/views/pre_onboarding_screen.dart';
 import 'package:capy_wallet/app/routes/app_pages.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -212,7 +212,7 @@ class OnboardingScreenView extends GetView<OnboardingScreenController> {
                     () => Switch(
                       value: controller.isTestnet.value,
                       onChanged: (v) => controller.isTestnet.value = v,
-                      activeThumbColor: AppColors.lightPrimary,
+                      activeColor: AppColors.lightPrimary,
                     ),
                   ),
                 ],

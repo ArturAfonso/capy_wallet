@@ -1,32 +1,24 @@
-
-
 lib/
 ├── app/
-│   ├── data/
-│   │   ├── models/           # WalletInfo, TransactionModel, etc.
-│   │   ├── providers/        # API calls (se houver), LDK Service
-│   │   ├── services/         # StorageService, BiometricService
-│   │   └── repositories/     # Abstração de dados
+│   ├── data/                 <-- CAMADA DE DADOS (GLOBAL)
+│   │   ├── models/           
+│   │   │   └── wallet_info.dart  (Seu modelo atualizado com Enum)
+│   │   ├── services/         
+│   │   │   ├── wallet_storage_service.dart (Gerencia CRUD de carteiras)
+│   │   │   ├── bitcoin_node_service.dart   (O LDK Node - também é global!)
+│   │   │   └── biometric_service.dart      (Opcional, futuro)
+│   │   └── providers/        (Se tiver chamadas de API externas)
 │   │
-│   ├── modules/
-│   │   ├── splash/           # Decide para onde ir (OnChain ou Lightning)
-│   │   ├── onboarding/       # Criação de seed + Escolha do Modo
+│   ├── modules/              <-- CAMADA VISUAL (TELAS)
+│   │   ├── splash/
+│   │   ├── onboarding/       (Criação, escolha de modo)
+│   │   ├── auth/             (Aqui entra o PIN e o RecoverWallet)
+│   │   │   ├── pin/          
+│   │   │   └── recover/      
 │   │   │
-│   │   ├── home_onchain/     # MÓDULO A (Cenário Simplificado)
-│   │   │   ├── bindings/
-│   │   │   ├── controllers/
-│   │   │   └── views/        # Visual "Cofre", lista simples, botão enviar/receber
-│   │   │
-│   │   ├── home_lightning/   # MÓDULO B (Cenário Completo)
-│   │   │   ├── bindings/
-│   │   │   ├── controllers/
-│   │   │   └── views/        # Visual "Dashboard", Abas (Cofre vs Lightning), Canais
-│   │   │
-│   │   └── shared/           # Widgets reutilizáveis (Botões, Inputs, QrCodeScanner)
+│   │   ├── home_onchain/     (Fluxo A - "O Cofre")
+│   │   └── home_lightning/   (Fluxo B - "O Banco")
 │   │
-│   ├── routes/
-│   │   ├── app_pages.dart    # Mapa de rotas
-│   │   └── app_routes.dart   # Nomes das rotas (/home-onchain, /home-lightning)
-│   │
-│   └── theme/                # Cores, Estilos (Baseado no Lovable)
+│   ├── routes/               (Navegação)
+│   └── theme/
 └── main.dart

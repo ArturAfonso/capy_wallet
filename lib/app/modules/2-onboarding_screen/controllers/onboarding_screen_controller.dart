@@ -1,9 +1,12 @@
+import 'package:capy_wallet/app/data/services/wallet_storage_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
 class OnboardingScreenController extends GetxController {
+  final WalletStorageService _storage = Get.find();
+  
   //=======Page 0 ============
   final Rx<TextEditingController> walletNameController = TextEditingController().obs;
   RxBool isOnChain = true.obs;
