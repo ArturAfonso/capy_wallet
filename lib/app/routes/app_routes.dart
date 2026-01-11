@@ -1,0 +1,22 @@
+part of 'app_pages.dart';
+// DO NOT EDIT. This is code generated via package:get_cli/get_cli.dart
+
+abstract class Routes {
+  Routes._();
+  static const HOME = _Paths.HOME;
+  static const ONBOARDING_SCREEN = _Paths.ONBOARDING_SCREEN;
+  static const PREONBOARDING_SCREEN = _Paths.PREONBOARDING_SCREEN;
+  static const FORKSTART_SCREEN = _Paths.FORKSTART_SCREEN;
+  static const RECOVER_WALLET = _Paths.RECOVER_WALLET;
+  static const PIN = _Paths.PIN;
+}
+
+abstract class _Paths {
+  _Paths._();
+  static const HOME = '/home';
+  static const ONBOARDING_SCREEN = '/onboarding-screen';
+  static const PREONBOARDING_SCREEN = '/preonboarding-screen';
+  static const FORKSTART_SCREEN = '/forkstart-screen';
+  static const RECOVER_WALLET = '/recover-wallet';
+  static const PIN = '/pin';
+}
