@@ -6,6 +6,7 @@ import 'package:introduction_screen/introduction_screen.dart';
 
 class OnboardingScreenController extends GetxController {
   final WalletStorageService _storage = Get.find();
+  RxInt actualPage = 0.obs;
   
   //=======Page 0 ============
   final Rx<TextEditingController> walletNameController = TextEditingController().obs;
@@ -13,6 +14,7 @@ class OnboardingScreenController extends GetxController {
   RxBool isTestnet = false.obs;
   final introKey = GlobalKey<IntroductionScreenState>();
   RxBool isWalletNameFilled = false.obs;
+  final isAdvancedOptionsExpanded = false.obs;
 
   //=======Page 1 ============
    RxBool obscure = true.obs;
@@ -31,6 +33,8 @@ class OnboardingScreenController extends GetxController {
     ); */
   }
 
+  
+
   //========Page 2=======================
 
   
@@ -42,6 +46,8 @@ class OnboardingScreenController extends GetxController {
     walletNameController.value.addListener(() {
     isWalletNameFilled.value = walletNameController.value.text.trim().isNotEmpty;
   });
+
+   actualPage = (introKey.currentState?.getCurrentPage() ?? 0).obs;
   }
 
  

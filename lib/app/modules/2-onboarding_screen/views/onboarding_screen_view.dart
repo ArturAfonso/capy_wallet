@@ -25,9 +25,9 @@ class OnboardingScreenView extends GetView<OnboardingScreenController> {
         fontWeight: FontWeight.normal,
         color: AppColors.lightForeground.withOpacity(0.7),
       ),
-      bodyPadding: EdgeInsets.symmetric(horizontal: 15),
+      bodyPadding: const EdgeInsets.symmetric(horizontal: 15),
       pageColor: Theme.of(context).scaffoldBackgroundColor,
-      imagePadding: EdgeInsets.only(top: 50),
+      imagePadding: const EdgeInsets.only(top: 50),
       titlePadding: EdgeInsets.zero,
       imageAlignment: Alignment.center,
       bodyAlignment: Alignment.topCenter,
@@ -124,7 +124,7 @@ class OnboardingScreenView extends GetView<OnboardingScreenController> {
                               ),
                             ),
                             Text(
-                              "Bitcoin na blockchain",
+                              "Blockchain",
                               style: AppTextStyles.bodyMedium.copyWith(
                                 color: AppColors.lightForeground.withOpacity(0.7),
                               ),
@@ -158,7 +158,7 @@ class OnboardingScreenView extends GetView<OnboardingScreenController> {
                             Transform.rotate(
                               angle: 45 * 3.1415927 / 220,
 
-                              child: Icon(MdiIcons.flashOutline, color: Colors.deepPurpleAccent),
+                              child: const Icon(MdiIcons.flashOutline, color: Colors.deepPurpleAccent),
                             ),
                             const SizedBox(height: 8),
                             Text(
@@ -184,48 +184,106 @@ class OnboardingScreenView extends GetView<OnboardingScreenController> {
               ],
             ),
             const SizedBox(height: 24),
-            // Rede Testnet
-            Container(
-              decoration: BoxDecoration(color: AppColors.lightInput, borderRadius: BorderRadius.circular(20)),
-              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-              child: Row(
+           Obx(() => GestureDetector(
+  onTap: () => controller.isAdvancedOptionsExpanded.value = !controller.isAdvancedOptionsExpanded.value,
+  child: AnimatedContainer(
+    duration: const Duration(milliseconds: 250),
+    curve: Curves.easeInOut,
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(20),
+    ),
+    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+    child: Column(
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Rede Testnet",
-                          style: AppTextStyles.bodyLarge.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.lightForeground,
-                          ),
-                        ),
-                        Text(
-                          "Para testes e desenvolvimento",
-                          style: AppTextStyles.bodyMedium.copyWith(color: AppColors.lightForeground.withOpacity(0.7)),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Obx(
-                    () => Switch(
-                      value: controller.isTestnet.value,
-                      onChanged: (v) => controller.isTestnet.value = v,
-                      activeColor: AppColors.lightPrimary,
+                  Text(
+                    "Configurações avançadas",
+                    style: AppTextStyles.bodyLarge.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.lightForeground,
                     ),
                   ),
                 ],
               ),
             ),
-            SizedBox(height: 32),
+            Icon(
+              controller.isAdvancedOptionsExpanded.value
+                  ? Icons.keyboard_arrow_up
+                  : Icons.keyboard_arrow_down,
+              color: !controller.isOnChain.value ? Colors.deepPurpleAccent : AppColors.lightPrimary,
+            ),
+          ],
+        ),
+        // Conteúdo expansível
+        if (controller.isAdvancedOptionsExpanded.value) ...[
+          const SizedBox(height: 16),
+          // Rede Testnet
+    Container(
+    decoration: BoxDecoration(color: AppColors.lightInput, borderRadius: BorderRadius.circular(20)),
+  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+    child: Row(
+    children: [
+      Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+  children: [   
+    Text(
+          "Rede Testnet",
+        style: AppTextStyles.bodyLarge.copyWith(
+        fontWeight: FontWeight.bold,
+            color: AppColors.lightForeground,
+              ),
+            ),
+            Text(
+                  "Para testes e desenvolvimento",
+                  style: AppTextStyles.bodyMedium.copyWith(color: AppColors.lightForeground.withOpacity(0.7)),
+                ),
+                ],
+                  ),
+                  ),
+              Obx(
+            () => Switch(
+          value: controller.isTestnet.value,
+          onChanged: (v) => controller.isTestnet.value = v,
+          activeColor: AppColors.lightPrimary,
+        ),
+                    ),
+                ],
+          ),
+                ),
+                  ],
+                  ],
+                ),
+                ),
+            )),
+              const SizedBox(height: 24),
+            // Checkbox
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Obx(
+                  () => Checkbox(
+                    value: controller.confirmed.value,
+                    onChanged: (v) => controller.confirmed.value = v ?? false,
+                  ),
+                ),
+                Expanded(child: Text('Exibir configurações avançadas', style: AppTextStyles.bodyMedium)),
+              ],
+            ),
+            const SizedBox(height: 32),
           ],
         ),
       ),
       PageViewModel(
         titleWidget: Column(
           children: [
-            SizedBox(height: 100),
+            const SizedBox(height: 100),
             Text(
               'Suas palavras-Chave',
               style: Theme.of(context).textTheme.displaySmall!.copyWith(fontWeight: FontWeight.bold, fontSize: 40),
@@ -269,7 +327,7 @@ class OnboardingScreenView extends GetView<OnboardingScreenController> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(height: 2),
+                        const SizedBox(height: 2),
                         Text(
                           'Estas palavras são a única forma de recuperar sua carteira. Nunca compartilhe com ninguém.',
                           style: AppTextStyles.bodyLarge.copyWith(fontSize: 15),
@@ -545,7 +603,7 @@ class OnboardingScreenView extends GetView<OnboardingScreenController> {
         ),
       ),
     ];
-    RxInt actualPage = (controller.introKey.currentState?.getCurrentPage() ?? 0).obs;
+    
 
     return IntroductionScreen(
       key: controller.introKey,
@@ -563,7 +621,7 @@ class OnboardingScreenView extends GetView<OnboardingScreenController> {
                 onPressed: () {
                   final currentPage = controller.introKey.currentState?.getCurrentPage() ?? 0;
                   if (currentPage > 0 && currentPage < 2) {
-                    actualPage.value = currentPage - 1;
+                    controller.actualPage.value = currentPage - 1;
                     controller.introKey.currentState?.previous();
                   } else if (currentPage == 2) {
                     print(currentPage);
@@ -586,25 +644,27 @@ class OnboardingScreenView extends GetView<OnboardingScreenController> {
         padding: const EdgeInsets.all(15.0),
         child: Obx(
           () => CustomButton(
-            text: actualPage.value == 2 ? 'Finalizar e Criar Pin' : 'Continuar ',
+            text: controller.actualPage.value == 2 ? 'Finalizar e Criar Pin' : 'Continuar ',
             textStyle: AppTextStyles.buttonLabel,
             onPressed:
-                (actualPage.value == 0 && controller.isWalletNameFilled.value) ||
-                    (actualPage.value == 1 && controller.confirmed.value) ||
-                    (actualPage.value == 2)
-                ? () {
-                    final currentPage = controller.introKey.currentState?.getCurrentPage() ?? 0;
-                    if (currentPage < 2) {
-                      actualPage.value = currentPage + 1;
-                      controller.introKey.currentState?.next();
-                    } else if (currentPage == 2) {
-                      // Leva para a nova página (exemplo: tela de PIN)
-                      //Get.toNamed(Routes.PIN); // Troque para a rota desejada
-                      print('criar pin');
-                      Get.toNamed(Routes.PIN);
-                    }
-                  }
-                : null,
+                  (controller.actualPage.value == 0 && controller.isWalletNameFilled.value) ||
+              (controller.actualPage.value == 1 && controller.confirmed.value) ||
+              (controller.actualPage.value == 2)
+          ? () {
+              final currentPage = controller.introKey.currentState?.getCurrentPage() ?? 0;
+              
+              if (currentPage == 0) {
+                // Verificar se está usando configurações não-padrão
+                _checkAndProceedFromPage0();
+              } else if (currentPage < 2) {
+                controller.actualPage.value = currentPage + 1;
+                controller.introKey.currentState?.next();
+              } else if (currentPage == 2) {
+                print('criar pin');
+                Get.toNamed(Routes.PIN);
+              }
+            }
+          : null,
           ),
         ),
       ),
@@ -627,12 +687,222 @@ class OnboardingScreenView extends GetView<OnboardingScreenController> {
       controlsPadding: kIsWeb ? const EdgeInsets.all(12.0) : const EdgeInsets.fromLTRB(8.0, 10, 8.0, 0),
 
       dotsDecorator: DotsDecorator(
-        size: Size(10.0, 10.0),
+        size: const Size(10.0, 10.0),
         color: Theme.of(context).dividerColor,
         activeColor: Theme.of(context).colorScheme.primary,
-        activeSize: Size(20, 10),
-        activeShape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
+        activeSize: const Size(20, 10),
+        activeShape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
       ),
     );
   }
+
+  // Adicione este método no corpo da classe OnboardingScreenView (fora do build)
+void _checkAndProceedFromPage0() {
+  // Verificar se está usando configurações padrão LDK
+  // Padrão LDK: Native SegWit + Mainnet + Sem customização de path
+  bool isStandardLDK = controller.isOnChain.value == true && 
+                       !controller.isTestnet.value;
+  
+  // Verificar se é Lightning (sempre precisa de aviso sobre compatibilidade futura)
+  bool isLightning = !controller.isOnChain.value;
+  
+  // Verificar se está em Testnet
+  bool isTestnet = controller.isTestnet.value;
+  
+  if (isStandardLDK && !isLightning) {
+    // Caminho feliz: configuração padrão, pode prosseguir direto
+    _proceedToNextPage();
+  } else {
+    // Mostrar dialog de aviso
+    _showAdvancedConfigDialog(isLightning: isLightning, isTestnet: isTestnet);
+  }
+}
+ 
+ void _proceedToNextPage() {
+  final currentPage = controller.introKey.currentState?.getCurrentPage() ?? 0;
+  controller.actualPage.value = currentPage + 1;
+  controller.introKey.currentState?.next();
+}
+
+
+void _showAdvancedConfigDialog({required bool isLightning, required bool isTestnet}) {
+  final RxBool isConfirmed = false.obs;
+  
+  Get.dialog(
+    AlertDialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      title: Row(
+        children: [
+          Icon(
+            Icons.warning_amber_rounded,
+            color: isTestnet ? Colors.orange : Colors.red,
+            size: 28,
+          ),
+          const SizedBox(width: 8),
+          const Expanded(
+            child: Text(
+              "Configuração Avançada",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+        ],
+      ),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (isTestnet) ...[
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.orange.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Colors.orange.withOpacity(0.3)),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "⚠️ Rede Testnet",
+                      style: AppTextStyles.bodyLarge.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.orange.shade900,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      "Você está criando uma carteira na rede de testes (Testnet). "
+                      "Esta carteira NÃO usa Bitcoin real e é apenas para desenvolvimento e aprendizado.",
+                      style: AppTextStyles.bodyMedium.copyWith(
+                        color: Colors.orange.shade900,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
+            ],
+            
+            if (isLightning) ...[
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.purple.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Colors.purple.withOpacity(0.3)),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "⚡ Lightning Network",
+                      style: AppTextStyles.bodyLarge.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.purple.shade900,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      "Carteiras Lightning exigem configurações específicas e gerenciamento de canais. "
+                      "Esta é uma funcionalidade avançada.",
+                      style: AppTextStyles.bodyMedium.copyWith(
+                        color: Colors.purple.shade900,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
+            ],
+            
+            const Text(
+              "Recomendações:",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            ),
+            const SizedBox(height: 8),
+            _buildRecommendationItem("Use Native SegWit para compatibilidade máxima"),
+            _buildRecommendationItem("Mainnet apenas para valores reais"),
+            _buildRecommendationItem("Testnet é seguro para aprender"),
+            
+            const SizedBox(height: 16),
+            Obx(
+              () => CheckboxListTile(
+                value: isConfirmed.value,
+                onChanged: (v) => isConfirmed.value = v ?? false,
+                title: const Text(
+                  "Estou ciente e quero continuar com esta configuração",
+                  style: TextStyle(fontSize: 14),
+                ),
+                controlAffinity: ListTileControlAffinity.leading,
+                contentPadding: EdgeInsets.zero,
+                dense: true,
+              ),
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Get.back(); // Fecha o dialog
+            // Opcionalmente, resetar para configurações padrão
+            controller.isTestnet.value = false;
+            controller.isOnChain.value = true;
+          },
+          child: Text(
+            "Voltar e Alterar",
+            style: TextStyle(color: AppColors.lightForeground.withOpacity(0.7)),
+          ),
+        ),
+        Obx(
+          () => ElevatedButton(
+            onPressed: isConfirmed.value
+                ? () {
+                    Get.back(); // Fecha dialog
+                    _proceedToNextPage(); // Avança para próxima página
+                  }
+                : null,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: isTestnet ? Colors.orange : AppColors.lightPrimary,
+              disabledBackgroundColor: Colors.grey.shade300,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            child: const Text(
+              "Criar Mesmo Assim",
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ),
+      ],
+    ),
+    barrierDismissible: false, // Não permite fechar clicando fora
+  );
+}
+
+Widget _buildRecommendationItem(String text) {
+  return Padding(
+    padding: const EdgeInsets.only(bottom: 8.0),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Icon(
+          Icons.check_circle_outline,
+          color: AppColors.lightPrimary,
+          size: 20,
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Text(
+            text,
+            style: AppTextStyles.bodyMedium,
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
 }

@@ -1,7 +1,7 @@
 import 'package:capy_wallet/app/data/services/wallet_storage_service.dart';
 import 'package:capy_wallet/app/data/theme/app_theme.dart';
 import 'package:capy_wallet/app/data/theme/theme_controller.dart';
-import 'package:capy_wallet/app_config.dart';
+import 'package:capy_wallet/app/data/app_config.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';

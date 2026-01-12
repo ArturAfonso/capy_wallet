@@ -22,3 +22,9 @@ lib/
 │   ├── routes/               (Navegação)
 │   └── theme/
 └── main.dart
+
+
+
+ placa --> controladora------baterias
+                |
+    conversor de 12v em 220v/110

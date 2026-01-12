@@ -1,7 +1,7 @@
 //(Gerencia CRUD de carteiras)
 
 import 'dart:convert';
-import 'package:capy_wallet/app_config.dart';
+import 'package:capy_wallet/app/data/app_config.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:uuid/uuid.dart';
 import '../models/wallet_info.dart'; // Importe o modelo acima
@@ -9,7 +9,7 @@ import 'package:get/get.dart';
 
 
 class WalletStorageService extends GetxService {
-  final _storage = const FlutterSecureStorage();
+  final _secureStorage = const FlutterSecureStorage();
   final _uuid = const Uuid();
   static const _walletsKey = 'wallets_metadata';
 
@@ -24,7 +24,10 @@ class WalletStorageService extends GetxService {
   Future<WalletInfo> saveNewWallet({
     required String name, 
     required String mnemonic, 
-    required WalletMode mode // <--- Obrigatório definir o modo na criação
+    required WalletMode mode, // <--- Obrigatório definir o modo na criação
+    // Novos parâmetros opcionais (se não passar, assume padrão)
+    BitcoinAddressType addressType = BitcoinAddressType.nativeSegwit,
+    String? derivationPath,
   }) async {
     final id = _uuid.v4();
     
@@ -34,10 +37,12 @@ class WalletStorageService extends GetxService {
       name: name,
        mode: mode,
        network: AppConfig.network,
+       addressType: addressType,    
+      derivationPath: derivationPath 
        );
     
     // Salva a seed (segredo)
-    await _storage.write(key: 'mnemonic_$id', value: mnemonic);
+    await _secureStorage.write(key: 'mnemonic_$id', value: mnemonic);
     
     // Salva os metadados na lista pública
     final list = await getWallets();
@@ -49,12 +54,12 @@ class WalletStorageService extends GetxService {
 
   /// Recupera Seed
   Future<String?> getMnemonic(String walletId) async {
-    return await _storage.read(key: 'mnemonic_$walletId');
+    return await _secureStorage.read(key: 'mnemonic_$walletId');
   }
 
   /// Lista apenas as carteiras DA REDE ATUAL
   Future<List<WalletInfo>> getWallets() async {
-    final String? data = await _storage.read(key: _walletsKey);
+    final String? data = await _secureStorage.read(key: _walletsKey);
     if (data == null) return [];
     
     try {
@@ -74,7 +79,7 @@ class WalletStorageService extends GetxService {
   // Método auxiliar privado
   Future<void> _saveWalletsList(List<WalletInfo> list) async {
     final String data = jsonEncode(list.map((e) => e.toJson()).toList());
-    await _storage.write(key: _walletsKey, value: data);
+    await _secureStorage.write(key: _walletsKey, value: data);
   }
 
   // Upgrade de Carteira (Caso o usuário queira ativar Lightning depois)
