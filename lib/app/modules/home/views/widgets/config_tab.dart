@@ -83,7 +83,7 @@ class ConfigTab extends GetView<HomeController> {
                           Switch(
                             value: controller.isDarkMode.value,
                             onChanged: (value) => controller.toggleTheme(),
-                            activeThumbColor: AppColors.lightPrimary,
+                            activeColor: AppColors.lightPrimary,
                           ),
                           const SizedBox(width: 8),
                           Icon(Icons.nightlight_outlined,
@@ -158,7 +158,7 @@ class ConfigTab extends GetView<HomeController> {
                           Switch(
                             value: !controller.isMainnet.value,
                             onChanged: (value) => controller.toggleNetwork(),
-                            activeThumbColor: Colors.orange,
+                            activeColor: Colors.orange,
                           ),
                         ],
                       ),
@@ -171,7 +171,7 @@ class ConfigTab extends GetView<HomeController> {
                       trailing: Switch(
                         value: controller.isLightningEnabled.value,
                         onChanged: (value) => controller.toggleLightning(),
-                        activeThumbColor: AppColors.lightPrimary,
+                        activeColor: AppColors.lightPrimary,
                       ),
                     )),
               ],

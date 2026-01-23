@@ -9,6 +9,10 @@ abstract class Routes {
   static const FORKSTART_SCREEN = _Paths.FORKSTART_SCREEN;
   static const RECOVER_WALLET = _Paths.RECOVER_WALLET;
   static const PIN = _Paths.PIN;
+  static const SPLASH = _Paths.SPLASH;
+  static const HOME_ONCHAIN = _Paths.HOME_ONCHAIN;
+  static const HOME_LIGHTNING = _Paths.HOME_LIGHTNING;
+  static const LOGIN = _Paths.LOGIN;
 }
 
 abstract class _Paths {
@@ -19,4 +23,8 @@ abstract class _Paths {
   static const FORKSTART_SCREEN = '/forkstart-screen';
   static const RECOVER_WALLET = '/recover-wallet';
   static const PIN = '/pin';
+  static const SPLASH = '/splash';
+  static const HOME_ONCHAIN = '/home-onchain';
+  static const HOME_LIGHTNING = '/home-lightning';
+  static const LOGIN = '/login';
 }
