@@ -48,7 +48,7 @@ class PinView extends GetView<PinController> {
         ),
         const SizedBox(height: 8),
         Text(
-          'Este PIN protegerá seu acesso à carteira',
+          'Este PIN protegerá seu acesso à carteira neste dispositivo',
           style: AppTextStyles.bodyLarge.copyWith(
             color: AppColors.lightForeground.withOpacity(0.7),
           ),

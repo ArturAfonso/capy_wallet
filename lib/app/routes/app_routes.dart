@@ -12,6 +12,7 @@ abstract class Routes {
   static const SPLASH = _Paths.SPLASH;
   static const HOME_ONCHAIN = _Paths.HOME_ONCHAIN;
   static const HOME_LIGHTNING = _Paths.HOME_LIGHTNING;
+  static const LOGIN = _Paths.LOGIN;
 }
 
 abstract class _Paths {
@@ -25,4 +26,5 @@ abstract class _Paths {
   static const SPLASH = '/splash';
   static const HOME_ONCHAIN = '/home-onchain';
   static const HOME_LIGHTNING = '/home-lightning';
+  static const LOGIN = '/login';
 }
