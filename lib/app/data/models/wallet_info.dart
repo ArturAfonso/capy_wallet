@@ -22,6 +22,10 @@ class WalletInfo {
   final BitcoinAddressType addressType;
   final String? derivationPath; // Se null, assumimos o padrão daquele tipo
 
+  // SEGURANÇA (Novos Campos)
+  final String? pinHash; // O PIN transformado em código
+  final String? pinSalt; // "Tempero" aleatório para segurança única
+
   WalletInfo({
     required this.id, 
     required this.name, 
@@ -29,6 +33,8 @@ class WalletInfo {
     this.network = 'testnet', // Default
     this.addressType = BitcoinAddressType.nativeSegwit, // Default moderno
     this.derivationPath,
+    this.pinHash, // <--- Novo
+    this.pinSalt, // <--- Novo
   });
 
 
@@ -57,6 +63,8 @@ class WalletInfo {
     'network': network,
     'addressType': addressType.toString(),
     'derivationPath': derivationPath,
+    'pinHash': pinHash, // <--- Salva
+    'pinSalt': pinSalt, // <--- Salva
   };
 
   factory WalletInfo.fromJson(Map<String, dynamic> json) {
@@ -78,6 +86,26 @@ class WalletInfo {
       
       // Recupera o Path
       derivationPath: json['derivationPath'],
+      pinHash: json['pinHash'], // <--- Lê
+      pinSalt: json['pinSalt'], // <--- Lê
+    );
+  }
+
+  // Método auxiliar para criar uma cópia atualizada (útil para adicionar o PIN depois)
+  WalletInfo copyWith({
+    String? pinHash,
+    String? pinSalt,
+    // adicione outros campos se necessário
+  }) {
+    return WalletInfo(
+      id: id,
+      name: name,
+      mode: mode,
+      network: network,
+      addressType: addressType,
+      derivationPath: derivationPath,
+      pinHash: pinHash ?? this.pinHash,
+      pinSalt: pinSalt ?? this.pinSalt,
     );
   }
 }

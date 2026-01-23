@@ -62,7 +62,7 @@ Widget _buildSummaryCard(OnboardingScreenController controller) {
         _buildSummaryRow(
           label: 'Nome',
           value: Obx(() => Text(
-            controller.walletNameController.text,
+            controller.draft.value.name,
             style: AppTextStyles.bodyLarge.copyWith(
               fontWeight: FontWeight.bold,
               color: AppColors.lightForeground,
@@ -114,7 +114,7 @@ Widget _buildTypeBadge(OnboardingScreenController controller) {
   return Container(
     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
     decoration: BoxDecoration(
-      color: controller.isOnChain.value 
+      color: !controller.draft.value.isLightningMode
           ? AppColors.lightPrimary 
           : Colors.deepPurpleAccent,
       borderRadius: BorderRadius.circular(16),
@@ -123,11 +123,11 @@ Widget _buildTypeBadge(OnboardingScreenController controller) {
       mainAxisSize: MainAxisSize.min,
       children: [
         Transform.rotate(
-          angle: controller.isOnChain.value 
+          angle: !controller.draft.value.isLightningMode 
               ? -45 * 3.1415927 / 180 
               : 45 * 3.1415927 / 220,
           child: Icon(
-            controller.isOnChain.value 
+            !controller.draft.value.isLightningMode
                 ? Icons.link 
                 : MdiIcons.flashOutline,
             color: Colors.white,
@@ -136,7 +136,7 @@ Widget _buildTypeBadge(OnboardingScreenController controller) {
         ),
         const SizedBox(width: 6),
         Text(
-          controller.isOnChain.value ? 'On-chain' : 'Lightning',
+          !controller.draft.value.isLightningMode ? 'On-chain' : 'Lightning',
           style: const TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
@@ -155,7 +155,7 @@ Widget _buildNetworkBadge(OnboardingScreenController controller) {
       borderRadius: BorderRadius.circular(16),
     ),
     child: Text(
-      controller.isTestnetSelected.value ? 'Testnet' : 'Mainnet',
+      controller.draft.value.isTestnet ? 'Testnet' : 'Mainnet',
       style: AppTextStyles.bodyMedium.copyWith(
         color: AppColors.lightForeground,
         fontWeight: FontWeight.bold,

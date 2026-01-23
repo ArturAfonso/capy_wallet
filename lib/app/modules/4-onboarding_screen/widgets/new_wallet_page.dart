@@ -100,8 +100,8 @@ PageViewModel buildNewWalletPage(
                   title: "On-chain",
                   subtitle: "Blockchain",
                   icon: Icons.link,
-                  isSelected: controller.isOnChain.value,
-                  onTap: () => controller.isOnChain.value = true,
+                  isSelected: !controller.draft.value.isLightningMode,//controller.isOnChain.value,
+                  onTap: () => controller.draft.value.isLightningMode = false,
                   primaryColor: AppColors.lightPrimary,
                   angle: -45 * 3.1415927 / 180,
                 )),
@@ -114,8 +114,8 @@ PageViewModel buildNewWalletPage(
                   title: "Lightning",
                   subtitle: "Pagamentos rápidos",
                   icon: MdiIcons.flashOutline,
-                  isSelected: !controller.isOnChain.value,
-                  onTap: () => controller.isOnChain.value = false,
+                  isSelected: controller.draft.value.isLightningMode,
+                  onTap: () => controller.draft.value.isLightningMode = true,
                   primaryColor: Colors.deepPurpleAccent,
                   angle: 45 * 3.1415927 / 220,
                 )),
@@ -139,24 +139,25 @@ PageViewModel buildNewWalletPage(
     Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
       child: Obx(() => CheckboxListTile(
-          
-            contentPadding: EdgeInsets.zero,
-            title: Text(
-              "Adicionar frase de extensão",
-              style: AppTextStyles.bodyMedium.copyWith(
-                color: AppColors.lightForeground,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            value: controller.isExtensionPhraseEnabled.value,
-            onChanged: (v) => controller.isExtensionPhraseEnabled.value = v ?? false,
-            controlAffinity: ListTileControlAffinity.trailing,
-            activeColor: AppColors.lightPrimary,
-          )),
+  contentPadding: EdgeInsets.zero,
+  title: Text(
+    "Adicionar frase de extensão",
+    style: AppTextStyles.bodyMedium.copyWith(
+      color: AppColors.lightForeground,
+      fontWeight: FontWeight.w500,
+    ),
+  ),
+  value: controller.draft.value.extensionPhraseEnabled,
+  onChanged: (v) => controller.draft.value = controller.draft.value.copyWith(
+    extensionPhraseEnabled: v ?? false,
+  ),
+  controlAffinity: ListTileControlAffinity.trailing,
+  activeColor: AppColors.lightPrimary,
+)),
     ),
     Padding(
       padding: const EdgeInsets.only(left: 5, right: 5, bottom: 5),
-      child: Obx(() => controller.isExtensionPhraseEnabled.value
+      child: Obx(() => controller.draft.value.extensionPhraseEnabled
           ? Padding(
               padding: const EdgeInsets.only(bottom: 12.0),
               child: TextFormField(
@@ -226,8 +227,8 @@ PageViewModel buildNewWalletPage(
                     ),
                     Obx(
                       () => Switch(
-                        value: controller.isTestnetSelected.value,
-                        onChanged: (v) => controller.isTestnetSelected.value = v,
+                        value: controller.draft.value.isTestnet,
+                        onChanged: (v) => controller.draft.value = controller.draft.value.copyWith(isTestnet: v),
                         activeColor: AppColors.lightPrimary,
                       ),
                     ),
@@ -235,23 +236,23 @@ PageViewModel buildNewWalletPage(
                 ),
               ),
               const SizedBox(height: 10),
-              Obx(() => controller.isOnChain.value ? buildSeedLengthSelector(
-    selected: controller.seedLength.value,
-    onChanged: (v) => controller.seedLength.value = v,
+              Obx(() => !controller.draft.value.isLightningMode ? buildSeedLengthSelector(
+    selected: controller.draft.value.seedLength,
+    onChanged: (v) => controller.draft.value = controller.draft.value.copyWith(seedLength: v),
     primaryColor: AppColors.lightPrimary,
   ) : const SizedBox.shrink()),
    const SizedBox(height: 10),
-             Obx(() => buildTypeAddressSelector(
-  selected: controller.addressType.value,
-  onChanged: (v) => controller.addressType.value = v,
+            Obx(() => buildTypeAddressSelector(
+  selected: controller.draft.value.addressType,
+  onChanged: (v) => controller.setAddressType(v),
   primaryColor: AppColors.lightPrimary,
 )),
 const SizedBox(height: 10),
 
 // Widget de exibição do Derivation Path
 Obx(() => buildDerivationPathDisplay(
-  derivationPath: controller.derivationPath,
-  addressType: controller.addressType.value,
+  derivationPath: controller.draft.value.derivationPath ?? '',
+  addressType: controller.draft.value.addressType,
   primaryColor: AppColors.lightPrimary,
 )),
             ],
@@ -666,7 +667,7 @@ Widget _buildAdvancedOptions(OnboardingScreenController controller) {
               ),
               Icon(
                 controller.isAdvancedOptionsExpanded.value ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
-                color: !controller.isOnChain.value ? Colors.deepPurpleAccent : AppColors.lightPrimary,
+                color: controller.draft.value.isLightningMode ? Colors.deepPurpleAccent : AppColors.lightPrimary,
               ),
             ],
           ),
@@ -710,8 +711,8 @@ Widget _buildAdvancedOptions(OnboardingScreenController controller) {
                   ),
                   Obx(
                     () => Switch(
-                      value: controller.isTestnetSelected.value,
-                      onChanged: (v) => controller.isTestnetSelected.value = v,
+                      value: controller.draft.value.isTestnet,
+                      onChanged: (v) => controller.draft.value = controller.draft.value.copyWith(isTestnet: v),
                       activeColor: AppColors.lightPrimary,
                     ),
                   ),

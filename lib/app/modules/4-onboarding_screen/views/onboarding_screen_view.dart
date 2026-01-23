@@ -3,9 +3,9 @@ import 'dart:ui';
 import 'package:capy_wallet/app/data/shared/custom_button.dart';
 import 'package:capy_wallet/app/data/theme/app_colors.dart';
 import 'package:capy_wallet/app/data/theme/app_text_styles.dart';
-import 'package:capy_wallet/app/modules/2-onboarding_screen/widgets/new_wallet_page.dart';
-import 'package:capy_wallet/app/modules/2-onboarding_screen/widgets/seed_generated_page.dart';
-import 'package:capy_wallet/app/modules/2-onboarding_screen/widgets/wallet_summary_page.dart';
+import 'package:capy_wallet/app/modules/4-onboarding_screen/widgets/new_wallet_page.dart';
+import 'package:capy_wallet/app/modules/4-onboarding_screen/widgets/seed_generated_page.dart';
+import 'package:capy_wallet/app/modules/4-onboarding_screen/widgets/wallet_summary_page.dart';
 import 'package:capy_wallet/app/routes/app_pages.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +20,7 @@ class OnboardingScreenView extends GetView<OnboardingScreenController> {
 
   
 // Métodos auxiliares:
-bool _canProceed() {
+/* bool _canProceed() {
   switch (controller.actualPage.value) {
     case 0:
       // ✅ Agora usa a variável reativa que é atualizada pelo listener
@@ -32,28 +32,29 @@ bool _canProceed() {
     default:
       return false;
   }
-}
-
-void _handleContinue() {
+} */
+ Future<void> _handleContinue() async {
   final currentPage = controller.actualPage.value;
-  
+
   if (currentPage == 0) {
-    controller.updateWalletConfigFromPage0();
-    
-    if (controller.isStandardConfig()) {
+    // Não precisa mais de updateWalletConfigFromPage0, pois o draft já está sempre atualizado pelos listeners
+
+    if (controller.isStandardConfig) {
       _proceedToNextPage();
     } else {
       _showAdvancedConfigDialog(
-        isLightning: !controller.isOnChain.value,
-        isTestnet: controller.isTestnetSelected.value,
+        isLightning: controller.draft.value.isLightningMode,
+        isTestnet: controller.draft.value.isTestnet,
       );
     }
   } else if (currentPage == 1) {
     _proceedToNextPage();
   } else if (currentPage == 2) {
-    controller.finalizeWallet().then((_) {
-      Get.toNamed(Routes.PIN);
-    });
+    final createdWallet = await controller.finalizeWallet();
+    if (createdWallet != null) {
+         // Passa o objeto REAL (com ID) para a tela de PIN
+         Get.toNamed(Routes.PIN, arguments: createdWallet);
+       }
   }
 }
 
@@ -80,7 +81,9 @@ void _handleContinue() {
     }
 
     Widget buildImage(String assetName, [double width = 350]) {
-      return Image.asset(assetName, width: width);
+      return GestureDetector(
+        onTap: controller.printDraftInfo,
+        child: Image.asset(assetName, width: width));
     }
 
         List<PageViewModel> pages = [
@@ -133,7 +136,7 @@ void _handleContinue() {
           ? 'Finalizar e Criar Pin' 
           : 'Continuar',
       textStyle: AppTextStyles.buttonLabel,
-      onPressed: _canProceed() ? () => _handleContinue() : null,
+      onPressed: controller.canProceed ? () => _handleContinue() : null,
     ),
   ),
 ),
@@ -167,7 +170,7 @@ void _handleContinue() {
   }
 
   // Adicione este método no corpo da classe OnboardingScreenView (fora do build)
-void _checkAndProceedFromPage0() {
+/* void _checkAndProceedFromPage0() {
   // Verificar se está usando configurações padrão LDK
   // Padrão LDK: Native SegWit + Mainnet + Sem customização de path
   bool isStandardLDK = controller.isOnChain.value == true && 
@@ -186,7 +189,7 @@ void _checkAndProceedFromPage0() {
     // Mostrar dialog de aviso
     _showAdvancedConfigDialog(isLightning: isLightning, isTestnet: isTestnet);
   }
-}
+} */
  
  void _proceedToNextPage() {
   final currentPage = controller.introKey.currentState?.getCurrentPage() ?? 0;
@@ -209,10 +212,12 @@ void _showAdvancedConfigDialog({required bool isLightning, required bool isTestn
             size: 28,
           ),
           const SizedBox(width: 8),
-          const Expanded(
+           Expanded(
             child: Text(
               "Configuração Avançada",
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style: AppTextStyles.bodyLarge.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
         ],
@@ -317,32 +322,34 @@ void _showAdvancedConfigDialog({required bool isLightning, required bool isTestn
           onPressed: () {
             Get.back(); // Fecha o dialog
             // Opcionalmente, resetar para configurações padrão
-            controller.isTestnetSelected.value = false;
-            controller.isOnChain.value = true;
+            /* controller.isTestnetSelected.value */ 
+            /* controller.isOnChain.value = true; */ 
           },
           child: Text(
             "Voltar e Alterar",
             style: TextStyle(color: AppColors.lightForeground.withOpacity(0.7)),
           ),
         ),
-        Obx(
-          () => ElevatedButton(
-            onPressed: isConfirmed.value
-                ? () {
-                    Get.back(); // Fecha dialog
-                    _proceedToNextPage(); // Avança para próxima página
-                  }
-                : null,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: isTestnet ? Colors.orange : AppColors.lightPrimary,
-              disabledBackgroundColor: Colors.grey.shade300,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+        Center(
+          child: Obx(
+            () => ElevatedButton(
+              onPressed: isConfirmed.value
+                  ? () {
+                      Get.back(); // Fecha dialog
+                      _proceedToNextPage(); // Avança para próxima página
+                    }
+                  : null,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: isTestnet ? Colors.orange : AppColors.lightPrimary,
+                disabledBackgroundColor: Colors.grey.shade300,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
               ),
-            ),
-            child: const Text(
-              "Criar Mesmo Assim",
-              style: TextStyle(color: Colors.white),
+              child: const Text(
+                "Criar Mesmo Assim",
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ),
         ),
