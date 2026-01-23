@@ -241,12 +241,12 @@ Widget _buildVisibleWord(int index, String word) {
 Widget _buildConfirmationCheckbox(OnboardingScreenController controller) {
   return Row(
     children: [
-      Obx(
-        () => Checkbox(
-          value: controller.seedConfirmed.value,
-          onChanged: (v) => controller.seedConfirmed.value = v ?? false,
-        ),
-      ),
+     Obx(
+  () => Checkbox(
+    value: controller.draft.value.isSeedBackedUp,
+    onChanged: (v) => controller.draft.value = controller.draft.value.copyWith(isSeedBackedUp: v ?? false),
+  ),
+),
       Expanded(
         child: Text(
           'Guardei minhas palavras em um local seguro',
