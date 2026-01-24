@@ -13,6 +13,7 @@ abstract class Routes {
   static const HOME_ONCHAIN = _Paths.HOME_ONCHAIN;
   static const HOME_LIGHTNING = _Paths.HOME_LIGHTNING;
   static const LOGIN = _Paths.LOGIN;
+  static const TRANSACTION_DETAIL = _Paths.TRANSACTION_DETAIL;
 }
 
 abstract class _Paths {
@@ -27,4 +28,5 @@ abstract class _Paths {
   static const HOME_ONCHAIN = '/home-onchain';
   static const HOME_LIGHTNING = '/home-lightning';
   static const LOGIN = '/login';
+  static const TRANSACTION_DETAIL = '/transaction-detail';
 }

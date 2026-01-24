@@ -18,6 +18,7 @@ import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/2-login/bindings/login_binding.dart';
 import '../modules/2-login/views/login_view.dart';
+import '../modules/5-onchain_only/home_onchain/views/widgets/transaction_detail_view.dart';
 
 part 'app_routes.dart';
 
@@ -77,6 +78,11 @@ class AppPages {
       name: _Paths.LOGIN,
       page: () => const LoginView(),
       binding: LoginBinding(),
+    ),
+    GetPage(
+      name: _Paths.TRANSACTION_DETAIL,
+      page: () => const TransactionDetailView(),
+      binding: HomeOnchainBinding(), // Usa o mesmo binding do HomeOnchain
     ),
   ];
 }

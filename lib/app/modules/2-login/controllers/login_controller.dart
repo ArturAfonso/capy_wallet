@@ -100,8 +100,14 @@ class LoginController extends GetxController {
 
       if (isValid) {
         // --- SUCESSO ---
-        // Passamos a carteira logada como argumento para a Home saber qual carregar
-        Get.offAllNamed(Routes.HOME, arguments: selectedWallet.value);
+        // Redireciona baseado no modo da carteira
+        if (selectedWallet.value!.mode == WalletMode.onChainOnly) {
+          // Carteira On-Chain Only -> HomeOnchainView
+          Get.offAllNamed(Routes.HOME_ONCHAIN, arguments: selectedWallet.value);
+        } else {
+          // Carteira Lightning Enabled -> HomeLightningView
+          Get.offAllNamed(Routes.HOME_LIGHTNING, arguments: selectedWallet.value);
+        }
         
         // Limpa a memória do controller local
       //  pinController.clear();

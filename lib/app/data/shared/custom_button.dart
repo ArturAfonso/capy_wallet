@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 
 class CustomButton extends StatelessWidget {
   final double width;
@@ -51,12 +52,14 @@ class CustomButton extends StatelessWidget {
                       ),
                 )
                 : Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     icon!,
                     const SizedBox(width: 8),
                     Text(
                       text,
+                      textAlign: TextAlign.center,
                       style:
                           textStyle ??
                           Theme.of(context).textTheme.bodyLarge?.copyWith(
