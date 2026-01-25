@@ -184,7 +184,7 @@ class LoginView extends GetView<LoginController> {
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: AppColors.lightInput,
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(24),
                 border: Border.all(color: AppColors.lightBorder),
               ),
               child: Text(
@@ -202,7 +202,7 @@ class LoginView extends GetView<LoginController> {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
               decoration: BoxDecoration(
                 color: AppColors.lightInput,
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(24),
                 border: Border.all(
                   color: controller.isDropdownOpen.value 
                     ? AppColors.lightPrimary 
@@ -261,7 +261,7 @@ class LoginView extends GetView<LoginController> {
                     ),
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(24),
                       border: Border.all(color: AppColors.lightBorder),
                       boxShadow: [
                         BoxShadow(
@@ -274,7 +274,7 @@ class LoginView extends GetView<LoginController> {
                     child: Material(
                       color: Colors.transparent,
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(24),
                         child: ListView.separated(
                           padding: const EdgeInsets.symmetric(vertical: 8),
                           shrinkWrap: true,
@@ -457,15 +457,15 @@ class LoginView extends GetView<LoginController> {
             filled: true,
             fillColor: AppColors.lightInput,
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(24),
               borderSide: BorderSide(color: AppColors.lightBorder),
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(24),
               borderSide: BorderSide(color: AppColors.lightBorder),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(24),
               borderSide: BorderSide(color: AppColors.lightPrimary, width: 1.5),
             ),
             suffixIcon: IconButton(
@@ -495,7 +495,7 @@ class LoginView extends GetView<LoginController> {
           backgroundColor: AppColors.lightPrimary,
           disabledBackgroundColor: AppColors.lightPrimary.withOpacity(0.4),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(24),
           ),
           elevation: 0,
         ),
@@ -551,7 +551,7 @@ class LoginView extends GetView<LoginController> {
           backgroundColor: AppColors.lightPrimary.withOpacity(0.05),
           side: BorderSide(color: AppColors.lightPrimary.withOpacity(0.3)),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(24),
           ),
         ),
         child: Row(

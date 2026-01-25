@@ -81,8 +81,15 @@ class PinController extends GetxController {
       
       print('PIN criado com sucesso para a carteira: ${targetWallet.name}');
       
-      // 3. Tudo pronto, vai pra Home
-      Get.offAllNamed(Routes.HOME);
+      if(targetWallet.mode == WalletMode.lightningEnabled) {
+        print('Navegando para Home Lightning');
+        Get.offAllNamed(Routes.HOME_LIGHTNING, arguments: targetWallet);
+      
+      }else{
+        print('Navegando para Home Onchain');
+        Get.offAllNamed(Routes.HOME_ONCHAIN, arguments: targetWallet);
+      }
+      
       
     } catch (e) {
       Get.snackbar("Erro", "Não foi possível salvar o PIN.");

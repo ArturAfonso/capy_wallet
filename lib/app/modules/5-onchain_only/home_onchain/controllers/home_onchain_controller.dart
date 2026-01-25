@@ -1,4 +1,5 @@
 import 'package:capy_wallet/app/data/models/wallet_info.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class HomeOnchainController extends GetxController {
@@ -41,7 +42,7 @@ class HomeOnchainController extends GetxController {
   
   // Lista de endereços (mock)
   final addresses = <String>[
-    'bc1q71w86orhtm9yoj5foxyenj0',
+    'testa ai essa merda',
     'bc1q1ses1f6dc6007d591exdeq2',
     'bc1q1zhk20p6o97at5owmbmvkn3',
     'bc1q0d6kzxjux13f9yw83gr5oc4',
@@ -153,7 +154,8 @@ class HomeOnchainController extends GetxController {
   
   /// Copia endereço para área de transferência
   Future<void> copyAddress() async {
-    // TODO: Implementar clipboard
+   
+     Clipboard.setData(ClipboardData(text: currentAddress,));
     Get.snackbar('Copiado', 'Endereço copiado para área de transferência');
   }
   

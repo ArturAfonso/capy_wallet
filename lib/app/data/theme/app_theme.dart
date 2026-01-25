@@ -47,7 +47,7 @@ class AppTheme {
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
         textStyle: AppTextStyles.buttonLabel,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20), // Bem arredondado (Capy style)
+          borderRadius: BorderRadius.circular(24), // Bem arredondado (Capy style)
         ),
       ),
     ),
@@ -99,7 +99,7 @@ class AppTheme {
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
-        borderSide: BorderSide(color: Colors.transparent),
+        borderSide: const BorderSide(color: Colors.transparent),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
@@ -207,7 +207,7 @@ class AppTheme {
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
-        borderSide: BorderSide(color: Colors.transparent),
+        borderSide: const BorderSide(color: Colors.transparent),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
@@ -228,6 +228,7 @@ class AppTheme {
      textTheme: ThemeData.light().textTheme.apply(
     bodyColor: AppColors.lightForeground.withOpacity(0.7),
     displayColor: AppColors.lightForeground.withOpacity(0.7),
+    
   ),
   );
 }

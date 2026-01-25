@@ -2,8 +2,9 @@ import 'package:capy_wallet/app/data/theme/app_colors.dart';
 import 'package:capy_wallet/app/data/theme/app_text_styles.dart';
 import 'package:capy_wallet/app/modules/5-onchain_only/home_onchain/controllers/home_onchain_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:qr_flutter/qr_flutter.dart';
+import 'package:pretty_qr_code/pretty_qr_code.dart';
 
 class ReceberTab extends GetView<HomeOnchainController> {
   const ReceberTab({super.key});
@@ -19,16 +20,35 @@ class ReceberTab extends GetView<HomeOnchainController> {
           icon: const Icon(Icons.arrow_back),
           onPressed: () => controller.changeTab(0),
         ),
+        centerTitle: false,
         title: Text(
           'Receber Bitcoin',
-          style: AppTextStyles.headingMedium.copyWith(
+          style: AppTextStyles.bodyLarge.copyWith(
             fontWeight: FontWeight.bold,
+            //color: AppColors.lightForeground,
           ),
         ),
         actions: [
           // Botão para selecionar endereço
           PopupMenuButton<int>(
-            icon: const Icon(Icons.list),
+            icon: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(24),
+                border: Border.all(color: AppColors.lightBorder),
+              ),
+              child: Obx(() => Row(
+                children: [
+                  Text(
+                        'Endereço #${controller.selectedAddressIndex.value + 1} ',
+                        style: AppTextStyles.bodyMedium.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const Icon(Icons.keyboard_arrow_down_outlined)
+                ],
+              )),
+            ),
             tooltip: 'Selecionar endereço',
             onSelected: controller.selectAddress,
             itemBuilder: (context) {
@@ -37,20 +57,21 @@ class ReceberTab extends GetView<HomeOnchainController> {
                 final address = entry.value;
                 return PopupMenuItem<int>(
                   value: index,
-                  child: Obx(() => Row(
-                        children: [
-                          if (controller.selectedAddressIndex.value == index)
-                            const Icon(Icons.check, size: 16),
-                          if (controller.selectedAddressIndex.value == index)
-                            const SizedBox(width: 8),
-                          Expanded(
-                            child: Text(
-                              '#${index + 1}: ${address.substring(0, 15)}...',
-                              style: AppTextStyles.bodySmall,
+                  child: SizedBox(
+                    width: Get.size.width / 2,
+                    child: Obx(() => Row(
+                          children: [
+                            if (controller.selectedAddressIndex.value == index) const Icon(Icons.check, size: 16),
+                            if (controller.selectedAddressIndex.value == index) const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                '#${index + 1}: ${address.substring(0, 15)}...',
+                                style: AppTextStyles.bodySmall,
+                              ),
                             ),
-                          ),
-                        ],
-                      )),
+                          ],
+                        )),
+                  ),
                 );
               }).toList();
             },
@@ -64,24 +85,19 @@ class ReceberTab extends GetView<HomeOnchainController> {
           children: [
             // QR Code
             _buildQRCode(),
-            
-            const SizedBox(height: 16),
-            
-            // Endereço
-            _buildAddressDisplay(),
-            
+
             const SizedBox(height: 24),
-            
+
             // Campo de quantia
             _buildAmountField(),
-            
+
             const SizedBox(height: 16),
-            
+
             // Campo de descrição
             _buildDescriptionField(),
-            
+
             const SizedBox(height: 24),
-            
+
             // Botões de ação
             _buildActionButtons(),
           ],
@@ -96,16 +112,48 @@ class ReceberTab extends GetView<HomeOnchainController> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          color: AppColors.lightBorder,
+        ),
       ),
       child: Column(
         children: [
-          Obx(() => QrImageView(
-                data: controller.currentAddress,
-                version: QrVersions.auto,
-                size: 250,
-                backgroundColor: Colors.white,
-                errorCorrectionLevel: QrErrorCorrectLevel.M,
-              )),
+          Obx(() {
+            final qrCode = QrCode.fromData(
+              data: controller.currentAddress,
+              errorCorrectLevel: QrErrorCorrectLevel.H,
+            );
+            
+            final qrImage = QrImage(qrCode);
+            
+            return PrettyQrView(
+              qrImage: qrImage,
+              decoration:  PrettyQrDecoration(
+                
+                shape: PrettyQrSmoothSymbol(
+                  color: AppColors.lightSecondary ,
+                ),
+                image:  PrettyQrDecorationImage(
+                  fit: BoxFit.scaleDown,
+                  image: const AssetImage('assets/capyqrcode2.png', 
+                 
+                  ),
+                  position: PrettyQrDecorationImagePosition.embedded,
+                  colorFilter: ColorFilter.mode(
+                   AppColors.lightSecondary ,
+                    BlendMode.srcIn,
+                  ),
+                  scale: 0.45, // Aumenta o tamanho da imagem (padrão é 0.25)
+                ),
+                background: AppColors.lightCard,
+              ),
+            );
+          }),
+
+          const SizedBox(height: 16),
+
+          // Endereço
+          _buildAddressDisplay(),
         ],
       ),
     );
@@ -117,8 +165,11 @@ class ReceberTab extends GetView<HomeOnchainController> {
           child: Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: const Color(0xFFFFF8E1),
-              borderRadius: BorderRadius.circular(16),
+              color: AppColors.lightCard,
+              borderRadius: BorderRadius.circular(24),
+              border: Border.all(
+                color: AppColors.lightBorder,
+              ),
             ),
             child: Row(
               children: [
@@ -153,46 +204,63 @@ class ReceberTab extends GetView<HomeOnchainController> {
           children: [
             Obx(() => Text(
                   'Quantia a receber (${controller.receiveUnit.value})',
-                  style: AppTextStyles.bodyLarge.copyWith(
+                  style: AppTextStyles.bodyMedium.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
                 )),
             Obx(() => GestureDetector(
                   onTap: controller.toggleReceiveUnit,
-                  child: Text(
-                    '⇄ Mudar para ${controller.receiveUnit.value == "BTC" ? "R\$" : "BTC"}',
-                    style: AppTextStyles.bodyMedium.copyWith(
-                      color: AppColors.lightPrimary,
-                      fontWeight: FontWeight.w600,
-                    ),
+                  child: Row(
+                    children: [
+                       Transform.rotate(
+                        angle: 88 * 3.1415927 / 180,
+                         child: Icon( 
+                         FontAwesomeIcons.arrowRightArrowLeft,
+                                               color: AppColors.lightForeground.withOpacity(0.7),
+                                               size: 14,
+                                               ),
+                       ),
+                      const SizedBox(width: 4), 
+                      Text(
+                        'Mudar para ${controller.receiveUnit.value == "BTC" ? "R\$" : "BTC"}',
+                        style: AppTextStyles.bodyMedium.copyWith(
+                          color: AppColors.lightForeground.withOpacity(0.7),
+                          //fontWeight: FontWeight.w600,
+                        ),
+                        
+                      ),
+                     
+                    ],
                   ),
                 )),
           ],
         ),
         const SizedBox(height: 8),
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: TextField(
-            onChanged: (value) => controller.receiveAmount.value = value,
-            keyboardType: const TextInputType.numberWithOptions(decimal: true),
-            decoration: InputDecoration(
-              hintText: '0.00',
-              hintStyle: AppTextStyles.bodyMedium.copyWith(
-                color: AppColors.lightForeground.withOpacity(0.3),
-              ),
-              filled: true,
-              fillColor: Colors.white,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
-                borderSide: BorderSide.none,
-              ),
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 14,
-              ),
+        TextField(
+          onChanged: (value) => controller.receiveAmount.value = value,
+          keyboardType: const TextInputType.numberWithOptions(decimal: true),
+          decoration: InputDecoration(
+            hintText: '0.00',
+            hintStyle: AppTextStyles.bodyMedium.copyWith(
+              color: AppColors.lightForeground.withOpacity(0.3),
+            ),
+            filled: true,
+            fillColor: Colors.white,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(24),
+              borderSide: BorderSide(color: AppColors.lightBorder),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(24),
+              borderSide: BorderSide(color: AppColors.lightBorder),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(24),
+              borderSide: BorderSide(color: AppColors.lightPrimary, width: 1.5),
+            ),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 16,
             ),
           ),
         ),
@@ -206,33 +274,35 @@ class ReceberTab extends GetView<HomeOnchainController> {
       children: [
         Text(
           'Descrição (opcional)',
-          style: AppTextStyles.bodyLarge.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
+          style: AppTextStyles.bodyMedium.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
         ),
         const SizedBox(height: 8),
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: TextField(
-            onChanged: (value) => controller.receiveDescription.value = value,
-            decoration: InputDecoration(
-              hintText: 'Ex: Pagamento freelance',
-              hintStyle: AppTextStyles.bodyMedium.copyWith(
-                color: AppColors.lightForeground.withOpacity(0.3),
-              ),
-              filled: true,
-              fillColor: Colors.white,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
-                borderSide: BorderSide.none,
-              ),
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 14,
-              ),
+        TextField(
+          onChanged: (value) => controller.receiveDescription.value = value,
+          decoration: InputDecoration(
+            hintText: 'Ex: Pagamento freelance',
+            hintStyle: AppTextStyles.bodyMedium.copyWith(
+              color: AppColors.lightForeground.withOpacity(0.3),
+            ),
+            filled: true,
+            fillColor: Colors.white,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(24),
+              borderSide: BorderSide(color: AppColors.lightBorder),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(24),
+              borderSide: BorderSide(color: AppColors.lightBorder),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(24),
+              borderSide: BorderSide(color: AppColors.lightPrimary, width: 1.5),
+            ),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 16,
             ),
           ),
         ),
@@ -246,14 +316,14 @@ class ReceberTab extends GetView<HomeOnchainController> {
         Expanded(
           child: OutlinedButton.icon(
             onPressed: controller.copyAddress,
-            icon: const Icon(Icons.copy),
+            icon:  Icon(Icons.copy, color: AppColors.lightForeground,),
             label: const Text('Copiar'),
             style: OutlinedButton.styleFrom(
               foregroundColor: AppColors.lightForeground,
               side: BorderSide(color: AppColors.lightBorder),
-              padding: const EdgeInsets.symmetric(vertical: 14),
+              padding: const EdgeInsets.symmetric(vertical: 16),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(24),
               ),
             ),
           ),
@@ -262,14 +332,19 @@ class ReceberTab extends GetView<HomeOnchainController> {
         Expanded(
           child: ElevatedButton.icon(
             onPressed: controller.shareQRCode,
-            icon: const Icon(Icons.share),
-            label: const Text('Compartilhar'),
+            icon: const Icon(Icons.share, color: Colors.white,),
+            label:   Text('Compartilhar', style: AppTextStyles.bodyMedium.copyWith(
+                          fontWeight: FontWeight.w900,
+                          fontSize: 16
+                        ),),
+          
             style: ElevatedButton.styleFrom(
+              
               backgroundColor: AppColors.lightPrimary,
               foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(vertical: 14),
+              padding: const EdgeInsets.symmetric(vertical: 16),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(24),
               ),
               elevation: 0,
             ),

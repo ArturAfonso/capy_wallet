@@ -27,8 +27,18 @@ class InicioTab extends GetView<HomeOnchainController> {
             _buildActionButtons(context),
             
             // Toggle Histórico/Detalhes
-            _buildSubTabToggle(),
-            
+            //_buildSubTabToggle(),
+           
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 16, right: 16),
+              child: Divider(height: 1, color: AppColors.lightForeground.withOpacity(0.1)),
+            ),
+             Text(
+            'Historico de Transações',
+            style: AppTextStyles.bodyLarge.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
             // Conteúdo (Histórico ou Detalhes)
             Expanded(
               child: Obx(() => controller.inicioSubTab.value == 0
